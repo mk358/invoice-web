@@ -13,20 +13,23 @@ export class InvoiceComponent implements OnInit {
   invoiceForm: FormGroup;
   mode: any = "";
   invoiceID: any = "";
-  constructor(private formBuilder: FormBuilder, private service: CommonService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder, private service: CommonService, private router: Router, private route: ActivatedRoute) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+   }
 
   ngOnInit(): void {
     this.initForm();
+    this.invoiceForm.reset();
     this.route.queryParams.subscribe(params => {
-      let isView = params['mode'] === 'view';
+      let isView = params['mode'];
       let invoiceID = params['id'];
       if (invoiceID) {
         this.invoiceID = invoiceID;
         this.getInvoiceByID(invoiceID);
       }
       if (isView != undefined) {
-        this.mode = (isView) ? 'view' : 'edit';
-        if (isView) {
+        this.mode = (isView === 'view') ? 'view' : 'edit';
+        if (isView === 'view') {
           this.invoiceForm.disable();
         }
       } else {
