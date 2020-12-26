@@ -9,9 +9,9 @@
         <form class="text-center border border-light p-5" [formGroup]="loginForm">
             <p class="h4">Sign in</p>
             <!-- Email -->
-            <input type="email" id="defaultLoginFormEmail" class="form-control p-4 mb-3" placeholder="E-mail" formControlName="email" (keyup.enter)="submit()" autocomplete="off" [ngClass]="{'invalid': loginForm['controls']['email'].errors && loginForm['controls']['email'].errors.required}">
+            <input type="email" id="defaultLoginFormEmail" class="form-control p-4 mb-3" placeholder="E-mail" formControlName="email" (keyup.enter)="submit()" autocomplete="off" [ngClass]="{'invalid': loginForm['controls']['email'].errors && loginForm['controls']['email'].errors.required && loginForm['controls']['email'].dirty}">
             <!-- Password -->
-            <input type="password" id="defaultLoginFormPassword" class="form-control p-4 mb-3" placeholder="Password" formControlName="password" (keyup.enter)="submit()" autocomplete="off" [ngClass]="{'invalid': loginForm['controls']['password'].errors && loginForm['controls']['password'].errors.required}">
+            <input type="password" id="defaultLoginFormPassword" class="form-control p-4 mb-3" placeholder="Password" formControlName="password" (keyup.enter)="submit()" autocomplete="off" [ngClass]="{'invalid': loginForm['controls']['password'].errors && loginForm['controls']['password'].errors.required && loginForm['controls']['password'].dirty}">
             <div class="d-flex justify-content-around mb-3">
                 <div>
                     <!-- Forgot password -->
