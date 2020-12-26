@@ -1,1 +1,134 @@
-<p>invoice works!</p>
+<div class="container invoice pb-5">
+    <h3>{{(mode == '') ? 'Create' : (mode == 'edit' ? 'Edit' : 'View')}} Invoice</h3>
+    <div class="invoice-form">
+        <form [formGroup]="invoiceForm">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="" for="cName">Customer Name</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" id="cName" formControlName="customerName" />
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="" for="cEmail">Email</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" id="cEmail" formControlName="email" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="" for="cContact">Contact Number</label>
+                    <input type="text" class="form-control" placeholder="" autocomplete="off" id="cContact" formControlName="contactNumber" />
+                </div>
+                <div class="col-md-6 mb-4">
+                    <label class="" for="cAddress">Address</label>
+                    <textarea class="form-control" placeholder="" autocomplete="off" id="cAddress" formControlName="address"></textarea>
+                </div>
+            </div>
+            <div class="container">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="row">
+                            <th class="col-md-1">S.No</th>
+                            <th class="col-md-4">Description</th>
+                            <th class="col-md-2">Qty</th>
+                            <th class="col-md-2">Price</th>
+                            <th class="col-md-2">Total</th>
+                            <th class="col-md-1">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody formArrayName="items">
+                        <tr class="row" *ngFor ="let value of invoiceForm['controls'].items['controls'];let i=index" [formGroupName]="i">
+                            <td class="col-md-1">{{i + 1}}</td>
+                            <td class="col-md-4">
+                                <textarea class="form-control" autocomplete="off" formControlName="description"></textarea>
+                            </td>
+                            <td class="col-md-2">
+                                <input type="number" class="form-control" formControlName="quantity" (keyup)="updateItemTotal(i)" />
+                            </td>
+                            <td class="col-md-2">
+                                <input type="number" class="form-control" formControlName="price" (keyup)="updateItemTotal(i)" />
+                            </td>
+                            <td class="col-md-2">
+                                <input type="text" class="form-control" formControlName="total" />
+                            </td>
+                            <td class="col-md-1">
+                                <span class="ml-2 cursor-pointer" (click)="deleteItems(i)" *ngIf="invoiceForm.value.items.length > 1" >
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" (click)="addNewItem()" type="button" *ngIf="mode!='view'">
+                    <i class="fa fa-plus mr-1"></i>
+                    Add Item
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-md-8 mb-4"></div>
+                <div class="col-md-1 mb-4 text-right">
+                    <label class="" for="totalWOTax">Total</label>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <input type="number" class="form-control" placeholder="" autocomplete="off" id="totalWOTax" formControlName="totalWOTax" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4 form-inline">
+                    <div class="col-md-4 mb-4">
+                        <label class="" for="CGST">CGST (%)</label>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input type="number" class="form-control" placeholder="" autocomplete="off" id="CGST" formControlName="CGST" (keyup)="updateTotal()" />
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 form-inline">
+                    <div class="col-md-4 mb-4">
+                        <label class="" for="SGST">SGST (%)</label>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input type="number" class="form-control" placeholder="" autocomplete="off" id="SGST" formControlName="SGST" (keyup)="updateTotal()" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4 form-inline">
+                    <div class="col-md-4 mb-4">
+                        <label class="" for="discount">Discount (%)</label>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input type="number" class="form-control" placeholder="" autocomplete="off" id="discount" formControlName="discount" (keyup)="updateTotal()" />
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 form-inline">
+                    <div class="col-md-4 mb-4">
+                        <label class="" for="totalWTax">Total With Tax</label>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input type="number" class="form-control" placeholder="" autocomplete="off" id="totalWTax" formControlName="totalWTax" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4 form-inline">
+                    <div class="col-md-4 mb-4">
+                        <label class="" for="amountPaid">Amount Paid</label>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input type="number" class="form-control" placeholder="" autocomplete="off" id="amountPaid" (keyup)="updateDueAmount()" formControlName="amountPaid" />
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 form-inline">
+                    <div class="col-md-4 mb-4">
+                        <label class="" for="amountDue">Amount Due</label>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <input type="number" class="form-control" placeholder="" autocomplete="off" id="amountDue" formControlName="amountDue" />
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success float-right mr-5" (click)="submit()" *ngIf="mode!='view'">
+                <i class="fa fa-save mr-1"></i>
+                Save
+            </button>
+        </form>
+    </div>
+</div>

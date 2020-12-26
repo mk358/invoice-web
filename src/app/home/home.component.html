@@ -1,46 +1,50 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-    <a class="navbar-brand" data-target="#">Logo</a>
-    <ul class="navbar-nav nav-left">
-        <li class="nav-item">
-            <a class="nav-link" data-target="#">Link</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-target="#">Link</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="dropdown" [ngClass]="{'show': showMenu}">
-            <a (click)="showMenu=!showMenu" href="javascript:void(0);"
-                class="no-after peers fxw-nw ai-c lh-1">
-                <div class="peer">
-                    <span class="navbar-text fsz-sm mr-1 c-white">userName</span>
-                    <img class="w-2r bdrs-50p"
-                        src="https://lh3.googleusercontent.com/proxy/gQATBqlDnGnRD6yjlX_alOMWGeMJjYlzLQaVI3bvq4-oVDiyWuy4GFjLrb8RLYPJxgthO931sl_HQhW1eEshcWz5YvbGU0JeD__psFJixBFlgfKDBA"
-                        alt="Logo" style="width:40px;">
-                </div>
-            </a>
-            <div class="overlay" (click)="showMenu=false" *ngIf="showMenu"></div>
-            <ul class="dropdown-menu fsz-sm" [ngClass]="{'show':showMenu}" *ngIf="showMenu">
-                <li>
-                    <a data-target="#" routerLink="/home/profile" class="c-grey">
-                        <i class="fa fa-user mr-2 ml-2"></i>
-                        <span>Profile</span>
-                    </a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li>
-                    <a data-target="#" (click)="logout()" class="c-grey">
-                        <i class="fa fa-power-off mr-2 ml-2"></i>
-                        <span>Logout</span>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-    <!-- <a class="navbar-brand float-right" data-target="#">
-        <img src="https://lh3.googleusercontent.com/proxy/gQATBqlDnGnRD6yjlX_alOMWGeMJjYlzLQaVI3bvq4-oVDiyWuy4GFjLrb8RLYPJxgthO931sl_HQhW1eEshcWz5YvbGU0JeD__psFJixBFlgfKDBA" alt="Logo" style="width:40px;">
-    </a> -->
-</nav>
+<div>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+        <a class="navbar-brand" data-target="#">Logo</a>
+        <ul class="navbar-nav nav-left">
+            <li class="nav-item">
+                <a class="nav-link" data-target="#"routerLink="/home/create">Create</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-target="#"routerLink="/home/invoice">Invoices</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="dropdown" [ngClass]="{'show': showMenu}">
+                <a (click)="showMenu=!showMenu" href="javascript:void(0);"
+                    class="no-after peers fxw-nw ai-c lh-1">
+                    <div class="peer">
+                        <span class="navbar-text fsz-sm mr-1 c-white" >{{userData?.firstName}} {{userData?.lastName}}</span>
+                        <img class="w-2r bdrs-50p"
+                            [src]="(userData?.userImg != '') ? userData?.userImg : 'https://icon-library.com/images/blank-person-icon/blank-person-icon-9.jpg'"
+                            alt="Logo" style="width:40px;">
+                    </div>
+                </a>
+                <div class="overlay" (click)="showMenu=false" *ngIf="showMenu"></div>
+                <ul class="dropdown-menu fsz-sm" [ngClass]="{'show':showMenu}" *ngIf="showMenu">
+                    <li>
+                        <a data-target="#" routerLink="/home/profile" class="c-grey cursor-pointer">
+                            <i class="fa fa-user mr-2 ml-2"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a data-target="#" (click)="logout()" class="c-grey cursor-pointer">
+                            <i class="fa fa-power-off mr-2 ml-2"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- <a class="navbar-brand float-right" data-target="#">
+            <img src="https://lh3.googleusercontent.com/proxy/gQATBqlDnGnRD6yjlX_alOMWGeMJjYlzLQaVI3bvq4-oVDiyWuy4GFjLrb8RLYPJxgthO931sl_HQhW1eEshcWz5YvbGU0JeD__psFJixBFlgfKDBA" alt="Logo" style="width:40px;">
+        </a> -->
+    </nav>
 
 
-<router-outlet></router-outlet>
+    <div class="mt-70">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+<button (click)="print()" type="button" class="btn btn-info float-right mr-5"><i class="fa fa-print"></i> print</button>
+<button (click)="downloadAsPDF()" type="button" class="btn btn-info ml-5"><i class="fa fa-cloud"></i> Download</button>
+<div class="invoice-box" id="invoice">
+    <table cellpadding="0" cellspacing="0" class="table table-stripe">
+        <tr class="top">
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td class="title">
+                            <img src="https://www.sparksuite.com/images/logo.png" style="width:100%; max-width:300px;">
+                        </td>
+                        
+                        <td>
+                            Invoice #: {{invoiceData?.invoiceNo}}<br>
+                            Created: {{invoiceData?.createdAt | date : 'MMMM DD, YYYY'}}<br>
+                            GSTIN: {{userData?.GSTIN}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <tr class="information">
+            <td colspan="4">
+                <table>
+                    <tr>
+                        <td>
+                            {{userData?.firstName}}<br>
+                            {{userData?.addressLine}}<br>
+                            {{userData?.email}}
+                        </td>
+                        
+                        <td>
+                            {{invoiceData?.customerName}}<br>
+                            {{invoiceData?.email}}<br>
+                            {{invoiceData?.contactNumber}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        
+        <tr class="heading">
+            <td class="col-md-7">Item</td>
+            <td class="col-md-1">Quantity</td>
+            <td class="col-md-1">Price</td>
+            <td class="col-md-3">Total</td>
+        </tr>
+        
+        <tr class="item" [ngClass]="{'last':i==(invoiceData?.items.length-1)}" *ngFor="let item of invoiceData?.items;let i=index">
+            <td class="col-md-7">{{item.description}}</td>
+            <td class="col-md-1">{{item.quantity}}</td>
+            <td class="col-md-1">{{item.price}}</td>
+            <td class="col-md-3">{{item.total}}</td>
+        </tr>
+        <tr class="total">
+            <td class="col-md-8"></td>
+            <td class="col-md-4" colspan="2">
+               Total without tax: 
+            </td>
+            <td>{{invoiceData?.totalWOTax}}</td>
+        </tr>
+        <tr class="total">
+            <td class="col-md-8"></td>
+            <td class="col-md-4" colspan="2">
+               Total: 
+            </td>
+            <td>{{invoiceData?.totalWTax}}</td>
+        </tr>
+    </table>
+</div>

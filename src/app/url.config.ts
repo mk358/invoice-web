@@ -1,3 +1,5 @@
 export const urls = {
-    loginURL: ""
+    loginURL: "users/login",
+    getUsers: "users",
+    invoice: "invoice"
 }

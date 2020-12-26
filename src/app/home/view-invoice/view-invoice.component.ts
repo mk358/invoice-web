@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonService } from 'src/app/common.service';
 
 @Component({
   selector: 'app-view-invoice',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewInvoiceComponent implements OnInit {
 
-  constructor() { }
+  invoicesList: any = [];
+  constructor(private service: CommonService, private router: Router) { }
 
   ngOnInit(): void {
+    this.getInvoices();
+  }
+  getInvoices(){
+    this.service.getInvoiceList().subscribe((res: any) => {
+      if (res.isSuccess) {
+        this.invoicesList = res.data;
+      } else {
+        this.service.showAlert('error', 'Error while fetching invoice data!');
+      }
+    })
   }
 
 }

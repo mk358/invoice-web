@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.css";
 @import '~font-awesome/css/font-awesome.css';
+@import '~ngx-toastr/toastr';
 
 body {
     background-color: darkgrey;
@@ -14,4 +15,16 @@ body {
 }
 .c-grey{
     color: #72777a!important;
+}
+.invalid{
+    border: 1px solid #ff0000;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+.mt-70{
+    margin-top: 70px;
+}
+.pt-50{
+    padding-top: 50px;
 }

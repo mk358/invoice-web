@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiURL: ""
+  apiURL: "http://invoice-node.herokuapp.com/api/"
 };
 
 /*

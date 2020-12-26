@@ -1,1 +1,27 @@
-<p>view-invoice works!</p>
+<div class="container pb-5 view-invoice">
+    <table class="table table-hover">
+        <thead>
+            <tr class="row">
+                <th class="col-md-2">Invoice No</th>
+                <th class="col-md-3">Customer Name</th>
+                <th class="col-md-2">Invoice Total</th>
+                <th class="col-md-2">Amount Paid</th>
+                <th class="col-md-2">Amount Due</th>
+                <th class="col-md-1">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="row" *ngFor="let item of invoicesList; let i = index">
+                <td class="col-md-2">{{item.invoiceNo}}</td>
+                <td class="col-md-3">{{item.customerName}}</td>
+                <td class="col-md-2">{{item.totalWTax}}</td>
+                <td class="col-md-2">{{item.amountPaid}}</td>
+                <td class="col-md-2">{{item.amountDue}}</td>
+                <td class="col-md-1">
+                    <span title="Edit" class="cursor-pointer" [routerLink]="['/home/create']" [queryParams]="{mode: 'edit', id: item.invoiceNo}"><i class="fa fa-pencil mr-3"></i></span>
+                    <span title="View" class="cursor-pointer" [routerLink]="['/home/view']" [queryParams]="{id: item.invoiceNo}"><i class="fa fa-eye mr-1"></i></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
