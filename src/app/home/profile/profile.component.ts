@@ -40,7 +40,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (res.isSuccess) {
           this.initForm(res.data);
           this.service.updateUserData(res);
+        } else {
+          this.service.showAlert('error', res.message || 'Error occured!')
         }
+      }, (error: any) => {
+        this.service.showAlert('error', error.message || 'Error occured!')
       })
     }
   }
@@ -93,8 +97,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (res.isSuccess){
           this.service.showAlert('success', 'Profile Data updated successfully!');
           this.service.updateUserData(res);
+        } else {
+          this.service.showAlert('error', res.message || 'Error occured!')
         }
-      })//*/
+      }, (error: any) => {
+        this.service.showAlert('error', error.message || 'Error occured!')
+      })
     } else {
       this.profileForm.markAllAsTouched();
       this.service.showAlert('error', 'Please fill all required fields!');
@@ -107,7 +115,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.isSubmitted = true;
         this.userNo = res.data && res.data.userId;
         sessionStorage.setItem('token', res.token);
+      } else {
+        this.service.showAlert('error', res.message || 'Error occured!')
       }
+    }, (error: any) => {
+      this.service.showAlert('error', error.message || 'Error occured!')
     })
   }
   submitFP() {
@@ -122,7 +134,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.service.showAlert('success', 'Password updated successfully! Login again to use the application.');
           this.router.navigate(['/login']);
           sessionStorage.clear();
+        } else {
+          this.service.showAlert('error', res.message || 'Error occured!')
         }
+      }, (error: any) => {
+        this.service.showAlert('error', error.message || 'Error occured!')
       })
     } else if (formValue.newPassword === formValue.confirmPassword) {
       this.service.showAlert('warning', 'New password and confirm passward should match!')

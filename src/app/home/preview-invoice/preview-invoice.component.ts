@@ -30,7 +30,11 @@ export class PreviewInvoiceComponent implements OnInit {
     this.service.getInvoiceByID(id).subscribe((res: any) => {
       if (res.isSuccess) {
         this.invoiceData =res.data;
+      } else {
+        this.service.showAlert('error', res.message || 'Error occured!')
       }
+    }, (error: any) => {
+      this.service.showAlert('error', error.message || 'Error occured!')
     })
   }
   print(): void {

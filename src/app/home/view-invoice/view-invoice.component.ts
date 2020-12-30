@@ -22,6 +22,8 @@ export class ViewInvoiceComponent implements OnInit {
       } else {
         this.service.showAlert('error', 'Error while fetching invoice data!');
       }
+    }, (error: any) => {
+      this.service.showAlert('error', error.message || 'Error occured!')
     })
   }
 

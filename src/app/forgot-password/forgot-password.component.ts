@@ -32,7 +32,11 @@ export class ForgotPasswordComponent implements OnInit {
         this.isSubmitted = true;
         this.userNo = res.data && res.data.userId;
         sessionStorage.setItem('token', res.token);
+      } else {
+        this.service.showAlert('error', res.message || 'Error occured!')
       }
+    }, (error: any) => {
+      this.service.showAlert('error', error.message || 'Error occured!')
     })
   }
   submit() {
@@ -47,7 +51,11 @@ export class ForgotPasswordComponent implements OnInit {
           this.service.showAlert('success', 'Password updated successfully! Login again to use the application.');
           this.router.navigate(['/login']);
           sessionStorage.clear();
+        } else {
+          this.service.showAlert('error', res.message || 'Error occured!')
         }
+      }, (error: any) => {
+        this.service.showAlert('error', error.message || 'Error occured!')
       })
     } else if (formValue.newPassword === formValue.confirmPassword) {
       this.service.showAlert('warning', 'New password and confirm passward should match!')

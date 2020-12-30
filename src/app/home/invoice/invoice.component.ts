@@ -13,12 +13,19 @@ export class InvoiceComponent implements OnInit {
   invoiceForm: FormGroup;
   mode: any = "";
   invoiceID: any = "";
+  userID: any;
+  userValue: any;
   constructor(private formBuilder: FormBuilder, private service: CommonService, private router: Router, private route: ActivatedRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
    }
 
   ngOnInit(): void {
+    this.userID = this.service.userData.userNo;
+    this.userValue = this.service.userChange.subscribe((value: any) => {
+      this.userID = value.userNo;
+    })
     this.initForm();
+    this.getUserDetails();
     this.invoiceForm.reset();
     this.route.queryParams.subscribe(params => {
       let isView = params['mode'];
@@ -133,6 +140,8 @@ export class InvoiceComponent implements OnInit {
           } else {
             this.service.showAlert('error', 'Error while saving data!')
           }
+        }, (error: any) => {
+          this.service.showAlert('error', error.message || 'Error occured!')
         })
       } else if (this.mode == 'edit') {
         this.service.updateInvoiceByID(this.invoiceID, invoiceData).subscribe((res: any) => {
@@ -143,18 +152,37 @@ export class InvoiceComponent implements OnInit {
           } else {
             this.service.showAlert('error', 'Error while saving data!')
           }
+        }, (error: any) => {
+          this.service.showAlert('error', error.message || 'Error occured!')
         })
       }
     } else {
       this.service.showAlert('error', 'Please fill all required fields!');
     }
   }
-
+  getUserDetails(){
+    if (this.userID) {
+      this.service.getUsersByID(this.userID).subscribe((res: any) => {
+        if (res.isSuccess) {
+          this.initForm(res.data);
+          this.service.updateUserData(res);
+        } else {
+          this.service.showAlert('error', res.message || 'Error occured!')
+        }
+      }, (error: any) => {
+        this.service.showAlert('error', error.message || 'Error occured!')
+      })
+    }
+  }
   getInvoiceByID(id) {
     this.service.getInvoiceByID(id).subscribe((res: any) => {
       if (res.isSuccess) {
         this.initForm(res.data);
+      } else {
+        this.service.showAlert('error', res.message || 'Error occured!')
       }
+    }, (error: any) => {
+      this.service.showAlert('error', error.message || 'Error occured!')
     }) 
   }
 

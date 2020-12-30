@@ -49,7 +49,11 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('email', res.data.email);
           this.service.updateUserData(res);
           this.router.navigate(['/home'])
+        } else {
+          this.service.showAlert('error', res.message || 'Error occured!')
         }
+      }, (error: any) => {
+        this.service.showAlert('error', error.message || 'Error occured!')
       })
     } else {
       this.service.showAlert("error", "Please fill all required fields!")
