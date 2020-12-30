@@ -45,12 +45,9 @@ export class LoginComponent implements OnInit {
       let userData = this.loginForm.value;
       this.service.signIn(userData).subscribe((res: any) => {
         if (res.isSuccess) {
-          this.service.secretKey = res.data && res.data.email;
-          this.service.userData = res.data;
-          this.service.token = res.token;
-          sessionStorage.setItem('userData', this.service.encryptData(res.data));
           sessionStorage.setItem('token', res.token);
           sessionStorage.setItem('email', res.data.email);
+          this.service.updateUserData(res);
           this.router.navigate(['/home'])
         }
       })

@@ -1,6 +1,8 @@
 <div>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
-        <a class="navbar-brand" data-target="#">Logo</a>
+        <a class="navbar-brand" data-target="#">
+            <img [src]="(userData && userData.logoImg != '') ? userData.logoImg : 'assets/Logo.png'" style="width:35px;"> 
+        </a>
         <ul class="navbar-nav nav-left">
             <li class="nav-item">
                 <a class="nav-link" data-target="#"routerLink="/home/create">Create</a>

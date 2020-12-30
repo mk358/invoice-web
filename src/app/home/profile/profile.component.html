@@ -1,1 +1,110 @@
-<p>profile works!</p>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link" [ngClass]="{'active': isProfile}" (click)="isProfile=!isProfile">Profile</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [ngClass]="{'active': !isProfile}" (click)="isProfile=!isProfile">Password</a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <div id="profile" class="container tab-pane active" [ngClass]="{'active': isProfile, 'fade': !isProfile}"><br>
+      <h3>Basic Details</h3>
+      <form class="" [formGroup]="profileForm">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="firstName" class="mr-sm-2">First Name:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('firstName')}" class="form-control mb-2 mr-sm-2" placeholder="Enter first name" id="firstName" formControlName="firstName">
+            </div>
+            <div class="col-md-6">
+                <label for="lastName" class="mr-sm-2">Last Name:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('lastName')}" class="form-control mb-2 mr-sm-2" placeholder="Enter last name" id="lastName"  formControlName="lastName">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="email" class="mr-sm-2">Email address:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('email')}" class="form-control mb-2 mr-sm-2" placeholder="Enter email" id="email" formControlName="email">
+            </div>
+            <div class="col-md-6">
+                <label for="addressLine" class="mr-sm-2">Address:</label>
+                <textarea [ngClass]="{'invalid': getErrorClass('addressLine')}" class="form-control mb-2 mr-sm-2" placeholder="Enter address" id="addressLine" formControlName="addressLine"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="contactNumber" class="mr-sm-2">Contact Number:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('contactNumber')}" class="form-control mb-2 mr-sm-2" placeholder="Enter contact number" id="contactNumber" formControlName="contactNumber">
+            </div>
+            <div class="col-md-6">
+                <label for="contactNumber2" class="mr-sm-2">Contact Number 2:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('contactNumber2')}" class="form-control mb-2 mr-sm-2" placeholder="Enter contact number" id="contactNumber2" formControlName="contactNumber2">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="companyName" class="mr-sm-2">Company Name:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('companyName')}" class="form-control mb-2 mr-sm-2" placeholder="Enter company name" id="companyName" formControlName="companyName">
+            </div>
+            <div class="col-md-6">
+                <label for="GSTIN" class="mr-sm-2">GSTIN:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('GSTIN')}" class="form-control mb-2 mr-sm-2" placeholder="Enter GSTIN" id="GSTIN" formControlName="GSTIN">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="websiteURL" class="mr-sm-2">Email Website URL:</label>
+                <input type="text" [ngClass]="{'invalid': getErrorClass('websiteURL')}" class="form-control mb-2 mr-sm-2" placeholder="Enter websiteURL" id="websiteURL" formControlName="websiteURL">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="userImg" class="mr-sm-2">Profile Photo:</label>
+                <input hidden #userImg type="file" [ngClass]="{'invalid': getErrorClass('userImg')}" class="form-control mb-2 mr-sm-2" placeholder="Choose profile photo" id="userImg" (change)="fileProcess($event, 'userImg')" accept="image/png, image/jpeg" >
+                <span class="img-section cursor-pointer" *ngIf="getFieldValue('userImg') == ''" (click)="userImg.click()"><i class="fa fa-plus"></i></span>
+                <img class="img-section cursor-pointer" *ngIf="getFieldValue('userImg') !== ''" [src]="getFieldValue('userImg')" (click)="userImg.click()"> 
+            </div>
+            <div class="col-md-4">
+                <label for="logoImg" class="mr-sm-2">Logo:</label>
+                <input hidden #logoImg type="file" [ngClass]="{'invalid': getErrorClass('logoImg')}" class="form-control mb-2 mr-sm-2" placeholder="Enter logo" id="logoImg" (change)="fileProcess($event, 'logoImg')" accept="image/png, image/jpeg" >
+                <span class="img-section cursor-pointer" *ngIf="getFieldValue('logoImg') == ''" (click)="logoImg.click()"><i class="fa fa-plus"></i></span>
+                <img class="form-control img-section cursor-pointer" *ngIf="getFieldValue('logoImg') !== ''" [src]="getFieldValue('logoImg')" (click)="logoImg.click()"> 
+
+            </div>
+            <div class="col-md-4">
+                <label for="signature" class="mr-sm-2">Signature:</label>
+                <input hidden #signature type="file" [ngClass]="{'invalid': getErrorClass('signature')}" class="form-control mb-2 mr-sm-2" placeholder="Enter signature" id="signature" (change)="fileProcess($event, 'signature')" accept="image/png, image/jpeg" >
+                <span class="img-section cursor-pointer" *ngIf="getFieldValue('signature') == ''" (click)="signature.click()"><i class="fa fa-plus"></i></span>
+                <img class="img-section cursor-pointer" *ngIf="getFieldValue('signature') !== ''" [src]="getFieldValue('signature')" (click)="signature.click()"> 
+
+            </div>
+        </div>
+    </form>
+    <button type="button" class="btn btn-primary mb-5 mt-3" (click)="submit()">Submit</button>
+    </div>
+    <div id="password" class="container tab-pane " [ngClass]="{'active': !isProfile, 'fade': isProfile}"><br>
+        <div class="main-container pt-50">
+            <div class="form-container">
+                <h3 class="p-2 text-center">Change Password</h3>
+                <form class="text-center border border-light p-5" [formGroup]="forgotForm">
+                    <div class="row" *ngIf="!isSubmitted">
+                        <label for="email" class="mr-sm-2">Email:</label>
+                        <input type="email" id="email" class="form-control p-4 mb-3" placeholder="E-mail" formControlName="email" (keyup.enter)="validateEmail()" autocomplete="off" [ngClass]="{'invalid': forgotForm['controls']['email'].errors && forgotForm['controls']['email'].errors.required && forgotForm['controls']['email'].dirty}">    
+                    </div>
+                    <div class="row" *ngIf="isSubmitted">
+                        <!-- Password -->
+                        <label for="newPassword" class="mr-sm-2">Password:</label>
+                        <input type="password" id="newPassword" class="form-control p-4 mb-3" placeholder="Password" formControlName="newPassword" (keyup.enter)="submit()" autocomplete="off" [ngClass]="{'invalid': forgotForm['controls']['newPassword'].errors && forgotForm['controls']['newPassword'].errors.required && forgotForm['controls']['newPassword'].dirty}">
+                        <!-- Password -->
+                        <label for="confirmPassword" class="mr-sm-2">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" class="form-control p-4 mb-3" placeholder="Password" formControlName="confirmPassword" (keyup.enter)="submit()" autocomplete="off" [ngClass]="{'invalid': forgotForm['controls']['confirmPassword'].errors && forgotForm['controls']['confirmPassword'].errors.required && forgotForm['controls']['confirmPassword'].dirty}">
+        
+                    </div>
+                    <!-- Sign in button -->
+                    <button *ngIf="!isSubmitted" block="true" class="btn btn-primary col-md-4" type="button" (click)="validateEmail()">Validate</button>
+                    <button *ngIf="isSubmitted" block="true" class="btn btn-primary col-md-4" type="button" (click)="submitFP()">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

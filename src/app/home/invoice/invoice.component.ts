@@ -73,7 +73,7 @@ export class InvoiceComponent implements OnInit {
       "description": [{value: (item) ? item.description : '', disabled: this.mode=='view'}, [Validators.required]],
       "quantity": [{value: (item) ? item.quantity : 0, disabled: this.mode=='view'}, [Validators.required, Validators.min(1)]],
       "price": [{value: (item) ? item.price : 0, disabled: this.mode=='view'}, [Validators.required, Validators.min(1)]],
-      "tax": [{value: (item) ? item.tax : 0, disabled: this.mode=='view'}, [Validators.required]],
+      // "tax": [{value: (item) ? item.tax : 0, disabled: this.mode=='view'}, [Validators.required]],
       "total": [{value: (item) ? item.total : 0, disabled: true}, [Validators.required]]
     })
   }
@@ -95,8 +95,9 @@ export class InvoiceComponent implements OnInit {
     let CGSTValue = this.invoiceForm.value.CGST;
     let SGSTValue = this.invoiceForm.value.SGST;
     let totalTax = (CGSTValue + SGSTValue) / 100;
-    let discount = this.invoiceForm.value.discount;
-    let totalWTax =  (totalItemsPrice * totalTax) + totalItemsPrice - (discount / 100);
+    let discount = (this.invoiceForm.value.discount / 100);
+    let calcWTax =  ((totalItemsPrice * totalTax) + totalItemsPrice);
+    let totalWTax =  calcWTax * ( 1- discount);
     this.invoiceForm.patchValue({
       'totalWOTax': totalItemsPrice,
       'totalWTax': totalWTax,
@@ -104,7 +105,7 @@ export class InvoiceComponent implements OnInit {
   }
   updateDueAmount(){
     let paidAmount: any = this.invoiceForm.value.amountPaid;
-    let total: any = this.invoiceForm.value.totalWTax;
+    let total: any = this.invoiceForm["controls"]["totalWTax"].value;
     this.invoiceForm.patchValue({
       'amountDue': (paidAmount > 0) ? (total - paidAmount) : total
     })
@@ -118,12 +119,16 @@ export class InvoiceComponent implements OnInit {
   }
   submit() {
     if (this.invoiceForm.valid) {
-      let invoiceData: any = this.invoiceForm.value;
+      let invoiceData: any = {};
+      for(var x in this.invoiceForm["controls"]){
+        invoiceData[x] = this.invoiceForm["controls"][x].value;
+    }
       console.log(invoiceData);
       if (this.mode == "") {
         this.service.createInvoice(invoiceData).subscribe((res: any) => {
           if (res.isSuccess) {
             this.service.showAlert('success', 'Invoice saved successfully!');
+            this.service.updateUserData(res);
             this.router.navigate(['/home/invoice']);
           } else {
             this.service.showAlert('error', 'Error while saving data!')
@@ -133,6 +138,7 @@ export class InvoiceComponent implements OnInit {
         this.service.updateInvoiceByID(this.invoiceID, invoiceData).subscribe((res: any) => {
           if (res.isSuccess) {
             this.service.showAlert('success', 'Invoice saved successfully!');
+            this.service.updateUserData(res);
             this.router.navigate(['/home/invoice']);
           } else {
             this.service.showAlert('error', 'Error while saving data!')
@@ -147,9 +153,9 @@ export class InvoiceComponent implements OnInit {
   getInvoiceByID(id) {
     this.service.getInvoiceByID(id).subscribe((res: any) => {
       if (res.isSuccess) {
-        this.initForm(res.data[0]);
+        this.initForm(res.data);
       }
-    })
+    }) 
   }
 
 }

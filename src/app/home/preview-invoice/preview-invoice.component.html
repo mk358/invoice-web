@@ -1,5 +1,5 @@
-<button (click)="print()" type="button" class="btn btn-info float-right mr-5"><i class="fa fa-print"></i> print</button>
-<button (click)="downloadAsPDF()" type="button" class="btn btn-info ml-5"><i class="fa fa-cloud"></i> Download</button>
+<button (click)="print()" title=" Print" type="button" class="btn btn-info float-right mr-5"><i class="fa fa-print"></i></button>
+<button (click)="downloadAsPDF()" title=" Download" type="button" class="btn btn-info float-right mr-2"><i class="fa fa-download"></i></button>
 <div class="invoice-box" id="invoice">
     <table cellpadding="0" cellspacing="0" class="table table-stripe">
         <tr class="top">
@@ -7,7 +7,8 @@
                 <table>
                     <tr>
                         <td class="title">
-                            <img src="https://www.sparksuite.com/images/logo.png" style="width:100%; max-width:300px;">
+                            <img [src]="(userData && userData.logoImg != '') ? userData.logoImg : 'assets/Logo.png'" style="max-width: 300px;height: 100px;">
+                            <h2>{{userData.companyName}}</h2>
                         </td>
                         
                         <td>

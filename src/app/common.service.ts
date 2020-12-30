@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable, throwError } from 'rxjs';
+import { Observable, Subject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { urls } from './url.config';
 import { ToastrService } from 'ngx-toastr';
@@ -16,20 +16,21 @@ export class CommonService {
   userData:any = {};
   secretKey: any = "";
   token: any = "";
+  userChange: Subject<any> = new Subject<any>();
 
   constructor(private http: HttpClient, private toastr: ToastrService) { }
   
   getHeaderOptions(noAuth?: boolean) {
-    let loggedUser: any = JSON.parse(sessionStorage.getItem('userDetails'));
-    if (!loggedUser) {
-      return;
-    }
+    // let loggedUser: any = this.decryptData(sessionStorage.getItem('userData'));
+    // if (!loggedUser) {
+    //   return;
+    // }
     let headerObj: any = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     }
     if (!noAuth) {
-      headerObj['authorization'] = loggedUser.token.accessToken;
+      headerObj['authorization'] = (sessionStorage.getItem('token'));
     }
     return {
       headers: new HttpHeaders(headerObj)
@@ -64,9 +65,21 @@ export class CommonService {
       .pipe(catchError(this.handleError))
   }
 
+  getUsersByEmail(userEmail: any): Observable<any>{
+    let headerOptions: any = this.getHeaderOptions();
+    return this.http.post(this.apiURL+urls.getUsers + "/email/"+ userEmail, headerOptions)
+      .pipe(catchError(this.handleError))
+  }
+
+  updateUserPassword(userData: any) {
+    let headerOptions: any = this.getHeaderOptions();
+    return this.http.post(this.apiURL+urls.getUsers + "/changePassword", userData, headerOptions)
+      .pipe(catchError(this.handleError))
+  }
+
   updateUsersByID(userID: any, userData: any): Observable<any>{
     let headerOptions: any = this.getHeaderOptions();
-    return this.http.put(this.apiURL+urls.getUsers + "/"+ userID, userData, headerOptions)
+    return this.http.post(this.apiURL+urls.getUsers + "/"+ userID, userData, headerOptions)
       .pipe(catchError(this.handleError))
   }
 
@@ -84,7 +97,7 @@ export class CommonService {
 
   updateInvoiceByID(invoiceID: any, invoiceData: any): Observable<any>{
     let headerOptions: any = this.getHeaderOptions();
-    return this.http.put(this.apiURL+urls.invoice + "/"+ invoiceID, invoiceData, headerOptions)
+    return this.http.post(this.apiURL+urls.invoice + "/"+ invoiceID, invoiceData, headerOptions)
       .pipe(catchError(this.handleError))
   }
 
@@ -104,6 +117,14 @@ export class CommonService {
     } else if (type === "error"){
       this.toastr.error(message, (title ? title : 'Error'), {timeOut: 3000});
     }
+  }
+
+  updateUserData(res: any) {
+    this.secretKey = res.data && res.data.email;
+    this.userData = res.data;
+    this.token = res.token;
+    sessionStorage.setItem('userData', this.encryptData(res.data));
+    this.userChange.next(this.userData)
   }
 
   encryptData(data) {

@@ -29,7 +29,7 @@ export class PreviewInvoiceComponent implements OnInit {
   getInvoiceByID(id) {
     this.service.getInvoiceByID(id).subscribe((res: any) => {
       if (res.isSuccess) {
-        this.invoiceData =res.data[0];
+        this.invoiceData =res.data;
       }
     })
   }
